@@ -1,0 +1,13 @@
+Package: abf2loader
+Type: Package
+Title: ABF2 loader
+Version: 0.1
+Date: 2023-06-24
+Author: Jun
+Maintainer: Jun <imlijunda@gmail.com>
+Description: Experimental ABF2 file loader using mmap.
+License: MIT + file LICENSE
+Imports: Rcpp (>= 1.0.10)
+LinkingTo: Rcpp
+RoxygenNote: 7.2.3
+Encoding: UTF-8
