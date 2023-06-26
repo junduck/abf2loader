@@ -29,7 +29,7 @@ user list, stats region, math, tag, scope config, delta, voice tag, annotation, 
 
 ## Overall file layout
 
-| 512 bytes header | 512 byte protocol | ... various meta 512 bytes blocks depending on section info described in header | ... Strings ... | ... Data ... | ... Other misc info |
+| 512 bytes header and section info | 512 byte protocol | ... various meta 512 bytes blocks depending on section info described in header | ... Strings ... | ... Data ... | ... Other misc info |
 
 ## Header
 
