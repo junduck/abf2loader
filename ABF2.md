@@ -27,6 +27,10 @@ ABF2 file is composed of several sections:
 * There are some other sections that are mostly Axon application specific and is not parsed, which include:
 user list, stats region, math, tag, scope config, delta, voice tag, annotation, stats
 
+## Overall file layout
+
+| 512 bytes header | 512 byte protocol | ... various meta 512 bytes blocks depending on section info described in header | ... Strings ... | ... Data ... | ... Other misc info |
+
 ## Header
 
 | Header   | Section info | Section info | ... | Section info |
