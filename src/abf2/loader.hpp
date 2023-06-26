@@ -22,9 +22,9 @@ namespace abf2 {
 namespace detail {
 class SimpleFileReader {
   std::string s;
-  
+
 public:
-  explicit SimpleFileReader(std::string_view path) {
+  explicit SimpleFileReader(std::string const &path) {
     std::ifstream ifs(path, std::ios::binary);
     if (!ifs) {
       throw std::runtime_error("Unable to open file");
@@ -32,10 +32,10 @@ public:
     std::string read(std::istreambuf_iterator<char>(ifs), {});
     s = std::move(read);
   }
-  
+
   SimpleFileReader(SimpleFileReader const &) = delete;
   SimpleFileReader &operator=(SimpleFileReader const &) = delete;
-  
+
   auto data() const -> char const * { return s.data(); }
   size_t size() const { return s.size(); }
 };
@@ -44,14 +44,14 @@ class SimpleFileMapper {
 private:
   char const *mapped;
   size_t mapped_size;
-  
+
 #if defined(_WIN32)
   HANDLE file;
   HANDLE map;
 #else
   int file;
 #endif
-  
+
 public:
   explicit SimpleFileMapper(std::string const &path) {
 #if defined(_WIN32)
@@ -59,20 +59,20 @@ public:
                       FILE_ATTRIBUTE_NORMAL, nullptr);
     if (file == INVALID_HANDLE_VALUE)
       throw std::runtime_error("Unable to open file");
-    
+
     LARGE_INTEGER fileSize;
     if (!GetFileSizeEx(file, &fileSize)) {
       CloseHandle(file);
       throw std::runtime_error("Unable to get file size");
     }
-    
+
     map = CreateFileMapping(file, nullptr, PAGE_READONLY, fileSize.HighPart,
                             fileSize.LowPart, nullptr);
     if (!map) {
       CloseHandle(file);
       throw std::runtime_error("Unable to mmap file");
     }
-    
+
     mapped = static_cast<const char *>(
       MapViewOfFile(map, FILE_MAP_READ, 0, 0, fileSize.QuadPart));
     mapped_size = fileSize.QuadPart;
@@ -80,13 +80,13 @@ public:
     file = open(path.c_str(), O_RDONLY);
     if (file < 0)
       throw std::runtime_error("Unable to open file");
-    
+
     struct stat fileInfo;
     if (fstat(file, &fileInfo) != 0) {
       close(file);
       throw std::runtime_error("Unable to get file size");
     }
-    
+
     mapped = static_cast<const char *>(
       mmap(nullptr, fileInfo.st_size, PROT_READ, MAP_SHARED, file, 0));
     if (mapped == MAP_FAILED) {
@@ -96,7 +96,7 @@ public:
     mapped_size = fileInfo.st_size;
 #endif
   }
-  
+
   ~SimpleFileMapper() {
 #if defined(_WIN32)
     UnmapViewOfFile(mapped);
@@ -107,10 +107,10 @@ public:
     close(file);
 #endif
   }
-  
+
   SimpleFileMapper(SimpleFileMapper const &) = delete;
   SimpleFileMapper &operator=(SimpleFileMapper const &) = delete;
-  
+
   auto data() const -> char const * { return mapped; }
   size_t size() const { return mapped_size; }
 };
@@ -122,17 +122,17 @@ class DataLoader {
   std::vector<pack::ABF2SynchArray> sa;
   pack::ABF2SectionInfo data_section;
   int op_mode;
-  
+
   // data in ram: chan, sweep, tick
   size_t v_idx(size_t chan, size_t sweep, size_t tick) const {
     return chan * nsweep * ntick + sweep * ntick + tick;
   }
-  
+
   // data on disk: sweep, tick, chan
   size_t raw_idx(size_t chan, size_t sweep, size_t tick) const {
     return sweep * ntick * nchan + tick * nchan + chan;
   }
-  
+
   template <typename PtrType>
   void copy_data_fixed(PtrType raw, double *target) const {
     for (size_t sweep = 0; sweep < nsweep; ++sweep)
@@ -141,7 +141,7 @@ class DataLoader {
           target[v_idx(chan, sweep, tick)] = raw[raw_idx(chan, sweep, tick)];
         }
   }
-  
+
   template <typename PtrType>
   void copy_data_var(PtrType raw, double *target) const {
     size_t p = 0;
@@ -154,13 +154,13 @@ class DataLoader {
       }
     }
   }
-  
+
 public:
   explicit DataLoader(FileMeta const &meta) {
     data_section = meta.header.sections[10];
     sa = meta.synchArray;
     op_mode = meta.protocol.nOperationMode;
-    
+
     nchan = meta.adc.size();
     switch (op_mode) {
     case 1:
@@ -188,7 +188,7 @@ public:
     default:
       throw std::runtime_error("Unsupported operation mode");
     }
-    
+
     if (data_section.uBytes == 2) {
       // int16 mode, handle scale and offset
       double resol = meta.protocol.fADCRange / meta.protocol.lADCResolution;
@@ -218,12 +218,12 @@ public:
       throw std::runtime_error("Unsupported data type");
     }
   }
-  
+
   size_t alloc_size() const { return nchan * nsweep * ntick; }
   size_t n_chan() const { return nchan; }
   size_t n_sweep() const { return nsweep; }
   size_t n_tick() const { return ntick; }
-  
+
   void fill_data(char const *raw, double *target) const {
     // regarding to reinterpret_cast:
     // raw should be allocated aligned to stricter alignment requirement than

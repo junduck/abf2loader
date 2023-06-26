@@ -2,7 +2,7 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' Load an ABF2 file
-#' 
+#'
 #' @param path Path to the file
 #' @export
 abf2load <- function(path) {
