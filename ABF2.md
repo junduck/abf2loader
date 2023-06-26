@@ -137,7 +137,7 @@ knowledge.
 
 ## Loading ABF2 files
 
-Loading ABF2 files are mostly simple [memcpy operations](src/abf2/meta.hpp#394) since most information is stored 1 to 1 corresponding to in
+Loading ABF2 files are mostly simple [memcpy operations](src/abf2/meta.hpp#L394) since most information is stored 1 to 1 corresponding to in
 memory structures with a couple exceptions:
 
 * Strings section: this section has a magic offset of 44 bytes, and entries are [splitted](src/abf2/meta.hpp#L439) by null terminator ```\0```.
