@@ -77,7 +77,7 @@ explanatory. There are some significant fields need to be elaborated here:
 
 ## Data section
 
-Data section is simply a sequence of data points. The of data points is determined by uBytes in the corresponding section info, and number
+Data section is simply a sequence of data points. The stored type of data points is determined by uBytes in the corresponding section info, and number
 of data points is determined by llNumEntries.
 
 Data can be stored in int16 or float32 format. This can be figured out by nDataFormat in header (if 0, int16 format is used), or by 11th
