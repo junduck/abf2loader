@@ -9,43 +9,45 @@
 
 namespace abf2 {
 namespace pack {
+// clang-format off
 #pragma pack(push, 1)
 struct ABF2Header {
-  char fFileSignature[4];      // char[4]
-  int8_t fFileVersionNumber1;  // int8
-  int8_t fFileVersionNumber2;  // int8
-  int8_t fFileVersionNumber3;  // int8
-  int8_t fFileVersionNumber4;  // int8
-  uint32_t uFileInfoSize;      // uint32
-  uint32_t lActualEpisodes;    // uint32
-  uint32_t uFileStartDate;     // uint32
-  uint32_t uFileStartTimeMS;   // uint32
-  uint32_t uStopwatchTime;     // uint32
-  int16_t nFileType;           // int16
-  int16_t nDataFormat;         // int16
-  int16_t nSimultaneousScan;   // int16
-  int16_t nCRCEnable;          // int16
-  uint32_t uFileCRC;           // uint32
-  int64_t FileGUID1;           // int64
-  int64_t FileGUID2;           // int64
-  uint32_t uCreatorVersion;    // uint32
-  uint32_t uCreatorNameIndex;  // uint32
-  uint32_t uModifierVersion;   // uint32
-  uint32_t uModifierNameIndex; // uint32
-  uint32_t uProtocolPathIndex; // uint32
+  char fFileSignature[4];      // File signature, should be "ABF2"
+                               // FileVersionNumber =
+  int8_t fFileVersionNumber1;  // fFileVersionNumber1 * 0.001 +
+  int8_t fFileVersionNumber2;  // fFileVersionNumber2 * 0.01 +
+  int8_t fFileVersionNumber3;  // fFileVersionNumber3 * 0.1 +
+  int8_t fFileVersionNumber4;  // fFileVersionNumber4
+  uint32_t uFileInfoSize;      //
+  uint32_t lActualEpisodes;    //
+  uint32_t uFileStartDate;     // YYYYMMDD, only if FileVersionNumber >= 2.0
+  uint32_t uFileStartTimeMS;   // ms since midnight of FileStartDate
+  uint32_t uStopwatchTime;     //
+  int16_t nFileType;           //
+  int16_t nDataFormat;         // if 0, int16 data record is used, otherwise float32.
+  int16_t nSimultaneousScan;   //
+  int16_t nCRCEnable;          //
+  uint32_t uFileCRC;           //
+  int64_t FileGUID1;           //
+  int64_t FileGUID2;           //
+  uint32_t uCreatorVersion;    //
+  uint32_t uCreatorNameIndex;  // corresponds to string table index
+  uint32_t uModifierVersion;   //
+  uint32_t uModifierNameIndex; // corresponds to string table index
+  uint32_t uProtocolPathIndex; // corresponds to string table index
 };
 
 struct ABF2SectionInfo {
-  uint32_t uBlockIndex; // uint32
-  uint32_t uBytes;      // uint32
-  int64_t llNumEntries; // int64
+  uint32_t uBlockIndex; // Where the section starts in the file, each block is 512 bytes
+  uint32_t uBytes;      // could be total bytes or bytes per entry depending on the section
+  int64_t llNumEntries; // number of entries in the section
 };
 
 struct ABF2Protocol {
   int16_t nOperationMode;
   float fADCSequenceInterval;
   int8_t bEnableFileCompression;
-  char sUnused1[3]; // string with ssize 3
+  char sUnused1[3];
   uint32_t uFileCompressionRatio;
   float fSynchTimeUnit;
   float fSecondsPerRun;
@@ -115,7 +117,7 @@ struct ABF2Protocol {
   int16_t nDigitizerTotalDigitalOuts;
   int16_t nDigitizerSynchDigitalOuts;
   int16_t nDigitizerType;
-  char sUnused[304]; // string with ssize 304
+  char sUnused[304];
 };
 
 struct ABF2ADC {
@@ -146,7 +148,7 @@ struct ABF2ADC {
   int16_t nStatsChannelPolarity;
   int32_t lADCChannelNameIndex;
   int32_t lADCUnitsIndex;
-  char sUnused[46]; // string with ssize 46
+  char sUnused[46];
 };
 
 struct ABF2DAC {
@@ -191,7 +193,7 @@ struct ABF2DAC {
   float fMembTestPreSettlingTimeMS;
   float fMembTestPostSettlingTimeMS;
   int16_t nLeakSubtractADCIndex;
-  char sUnused[124]; // string with ssize 124
+  char sUnused[124];
 };
 
 struct ABF2Epoch {
@@ -204,20 +206,8 @@ struct ABF2Epoch {
   char sUnused[21];
 };
 
-// ADCPerDAC is a struct that is repeated for each ADC channel
+// ADCPerDAC is unknown
 struct ADCPerDAC {
-  float fDACScaleFactor;
-  float fDACHoldingLevel;
-  float fDACCalibrationFactor;
-  float fDACCalibrationOffset;
-  int16_t nDigitalEnable;
-  int16_t nDigitalHolding;
-  int16_t nDigitalInterEpisode;
-  int16_t nDigitalDACChannel;
-  int16_t nDigitalTrainActiveLogic;
-  int32_t lDACChannelNameIndex;
-  int32_t lDACChannelUnitsIndex;
-  char sUnused[46]; // string with ssize 46
 };
 
 struct ABF2EpochPerDAC {
@@ -306,6 +296,7 @@ struct ABF2SynchArray {
 // Annotation
 // Stats
 #pragma pack(pop)
+// clang-format on
 
 constexpr static size_t ABF2HeaderSize = sizeof(ABF2Header);
 constexpr static size_t ABF2SectionInfoSize = sizeof(ABF2SectionInfo);
