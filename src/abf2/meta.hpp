@@ -3,6 +3,7 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
+#include <cstring>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -397,7 +398,7 @@ struct FileMeta {
     n = header.sections[id].llNumEntries;                                      \
     bsize = pack::ABF2##pack_name##Size;                                       \
     mem_name.reserve(n);                                                       \
-    for (int i = 0; i < n; ++i) {                                              \
+    for (size_t i = 0; i < n; ++i) {                                              \
       mem_name.push_back({});                                                  \
       std::memcpy(&mem_name.back(), data + offset, bsize);                     \
       offset += bsize;                                                         \

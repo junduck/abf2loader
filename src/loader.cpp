@@ -1,5 +1,9 @@
-#include "abf2/loader.hpp"
 #include <Rcpp.h>
+#include "abf2/loader.hpp"
+
+Rcpp::List attr_Header(abf2::FileMeta const &meta);
+Rcpp::List attr_Protocol(abf2::FileMeta const &meta);
+Rcpp::List attr_ADC(abf2::FileMeta const &meta);
 
 //' Load an ABF2 file
 //'
@@ -7,7 +11,7 @@
 //' @export
 // [[Rcpp::export]]
 Rcpp::NumericVector abf2load(Rcpp::String path) {
-#ifdef _WIN32
+#if 0
   abf2::detail::SimpleFileReader m(path);
 #else
   abf2::detail::SimpleFileMapper m(path);
@@ -18,5 +22,10 @@ Rcpp::NumericVector abf2load(Rcpp::String path) {
   Rcpp::NumericVector v(load.alloc_size());
   load.fill_data(m.data(), v.begin());
   v.attr("dim") = Rcpp::Dimension(load.n_tick(), load.n_sweep(), load.n_chan());
+
+  v.attr("header") = attr_Header(meta);
+  v.attr("protocol") = attr_Protocol(meta);
+  v.attr("adc") =  attr_ADC(meta);
+
   return v;
 }
