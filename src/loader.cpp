@@ -4,6 +4,11 @@
 Rcpp::List attr_Header(abf2::FileMeta const &meta);
 Rcpp::List attr_Protocol(abf2::FileMeta const &meta);
 Rcpp::List attr_ADC(abf2::FileMeta const &meta);
+Rcpp::List attr_DAC(abf2::FileMeta const &meta);
+Rcpp::List attr_Epoch(abf2::FileMeta const &meta);
+Rcpp::List attr_EpochPerDAC(abf2::FileMeta const &meta);
+Rcpp::List attr_UserList(abf2::FileMeta const &meta);
+Rcpp::List attr_SynchArray(abf2::FileMeta const &meta);
 
 //' Load an ABF2 file
 //'
@@ -26,6 +31,11 @@ Rcpp::NumericVector abf2load(Rcpp::String path) {
   v.attr("header") = attr_Header(meta);
   v.attr("protocol") = attr_Protocol(meta);
   v.attr("adc") =  attr_ADC(meta);
+  v.attr("dac") = attr_DAC(meta);
+  v.attr("epoch") = attr_Epoch(meta);
+  v.attr("epoch_per_dac") = attr_EpochPerDAC(meta);
+  v.attr("user_list") = attr_UserList(meta);
+  v.attr("synch_array") = attr_SynchArray(meta);
 
   return v;
 }

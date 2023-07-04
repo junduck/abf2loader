@@ -111,6 +111,8 @@ Rcpp::List attr_Protocol(abf2::FileMeta const &meta) {
   return result;
 }
 
+// TODO: set data.frame
+
 Rcpp::List attr_ADC(abf2::FileMeta const &meta) {
   struct vect_t {
     std::vector<int16_t> ADCNum;
@@ -199,5 +201,239 @@ Rcpp::List attr_ADC(abf2::FileMeta const &meta) {
   result("StatsChannelPolarity") = v.StatsChannelPolarity;
   result("ADCChannelNameIndex") = v.ADCChannelNameIndex;
   result("ADCUnitsIndex") = v.ADCUnitsIndex;
+  return result;
+}
+
+Rcpp::List attr_DAC(abf2::FileMeta const &meta) {
+  struct vect_t {
+    std::vector<int16_t> DACNum;
+    std::vector<int16_t> TelegraphDACScaleFactorEnable;
+    std::vector<float> InstrumentHoldingLevel;
+    std::vector<float> DACScaleFactor;
+    std::vector<float> DACHoldingLevel;
+    std::vector<float> DACCalibrationFactor;
+    std::vector<float> DACCalibrationOffset;
+    std::vector<int32_t> DACChannelNameIndex;
+    std::vector<int32_t> DACChannelUnitsIndex;
+    std::vector<int32_t> DACFilePtr;
+    std::vector<int32_t> DACFileNumEpisodes;
+    std::vector<int16_t> WaveformEnable;
+    std::vector<int16_t> WaveformSource;
+    std::vector<int16_t> InterEpisodeLevel;
+    std::vector<float> DACFileScale;
+    std::vector<float> DACFileOffset;
+    std::vector<int32_t> DACFileEpisodeNum;
+    std::vector<int16_t> DACFileADCNum;
+    std::vector<int16_t> ConditEnable;
+    std::vector<int32_t> ConditNumPulses;
+    std::vector<float> BaselineDuration;
+    std::vector<float> BaselineLevel;
+    std::vector<float> StepDuration;
+    std::vector<float> StepLevel;
+    std::vector<float> PostTrainPeriod;
+    std::vector<float> PostTrainLevel;
+    std::vector<int16_t> MembTestEnable;
+    std::vector<int16_t> LeakSubtractType;
+    std::vector<int16_t> PNPolarity;
+    std::vector<float> PNHoldingLevel;
+    std::vector<int16_t> PNNumADCChannels;
+    std::vector<int16_t> PNPosition;
+    std::vector<int16_t> PNNumPulses;
+    std::vector<float> PNSettlingTime;
+    std::vector<float> PNInterpulse;
+    std::vector<int16_t> LTPUsageOfDAC;
+    std::vector<int16_t> LTPPresynapticPulses;
+    std::vector<int32_t> DACFilePathIndex;
+    std::vector<float> MembTestPreSettlingTimeMS;
+    std::vector<float> MembTestPostSettlingTimeMS;
+    std::vector<int16_t> LeakSubtractADCIndex;
+  } v;
+  for (auto const &e : meta.dac) {
+    v.DACNum.push_back(e.nDACNum);
+    v.TelegraphDACScaleFactorEnable.push_back(e.nTelegraphDACScaleFactorEnable);
+    v.InstrumentHoldingLevel.push_back(e.fInstrumentHoldingLevel);
+    v.DACScaleFactor.push_back(e.fDACScaleFactor);
+    v.DACHoldingLevel.push_back(e.fDACHoldingLevel);
+    v.DACCalibrationFactor.push_back(e.fDACCalibrationFactor);
+    v.DACCalibrationOffset.push_back(e.fDACCalibrationOffset);
+    v.DACChannelNameIndex.push_back(e.lDACChannelNameIndex);
+    v.DACChannelUnitsIndex.push_back(e.lDACChannelUnitsIndex);
+    v.DACFilePtr.push_back(e.lDACFilePtr);
+    v.DACFileNumEpisodes.push_back(e.lDACFileNumEpisodes);
+    v.WaveformEnable.push_back(e.nWaveformEnable);
+    v.WaveformSource.push_back(e.nWaveformSource);
+    v.InterEpisodeLevel.push_back(e.nInterEpisodeLevel);
+    v.DACFileScale.push_back(e.fDACFileScale);
+    v.DACFileOffset.push_back(e.fDACFileOffset);
+    v.DACFileEpisodeNum.push_back(e.lDACFileEpisodeNum);
+    v.DACFileADCNum.push_back(e.nDACFileADCNum);
+    v.ConditEnable.push_back(e.nConditEnable);
+    v.ConditNumPulses.push_back(e.lConditNumPulses);
+    v.BaselineDuration.push_back(e.fBaselineDuration);
+    v.BaselineLevel.push_back(e.fBaselineLevel);
+    v.StepDuration.push_back(e.fStepDuration);
+    v.StepLevel.push_back(e.fStepLevel);
+    v.PostTrainPeriod.push_back(e.fPostTrainPeriod);
+    v.PostTrainLevel.push_back(e.fPostTrainLevel);
+    v.MembTestEnable.push_back(e.nMembTestEnable);
+    v.LeakSubtractType.push_back(e.nLeakSubtractType);
+    v.PNPolarity.push_back(e.nPNPolarity);
+    v.PNHoldingLevel.push_back(e.fPNHoldingLevel);
+    v.PNNumADCChannels.push_back(e.nPNNumADCChannels);
+    v.PNPosition.push_back(e.nPNPosition);
+    v.PNNumPulses.push_back(e.nPNNumPulses);
+    v.PNSettlingTime.push_back(e.fPNSettlingTime);
+    v.PNInterpulse.push_back(e.fPNInterpulse);
+    v.LTPUsageOfDAC.push_back(e.nLTPUsageOfDAC);
+    v.LTPPresynapticPulses.push_back(e.nLTPPresynapticPulses);
+    v.DACFilePathIndex.push_back(e.lDACFilePathIndex);
+    v.MembTestPreSettlingTimeMS.push_back(e.fMembTestPreSettlingTimeMS);
+    v.MembTestPostSettlingTimeMS.push_back(e.fMembTestPostSettlingTimeMS);
+    v.LeakSubtractADCIndex.push_back(e.nLeakSubtractADCIndex);
+  }
+  Rcpp::List result;
+  result("DACNum") = v.DACNum;
+  result("TelegraphDACScaleFactorEnable") = v.TelegraphDACScaleFactorEnable;
+  result("InstrumentHoldingLevel") = v.InstrumentHoldingLevel;
+  result("DACScaleFactor") = v.DACScaleFactor;
+  result("DACHoldingLevel") = v.DACHoldingLevel;
+  result("DACCalibrationFactor") = v.DACCalibrationFactor;
+  result("DACCalibrationOffset") = v.DACCalibrationOffset;
+  result("DACChannelNameIndex") = v.DACChannelNameIndex;
+  result("DACChannelUnitsIndex") = v.DACChannelUnitsIndex;
+  result("DACFilePtr") = v.DACFilePtr;
+  result("DACFileNumEpisodes") = v.DACFileNumEpisodes;
+  result("WaveformEnable") = v.WaveformEnable;
+  result("WaveformSource") = v.WaveformSource;
+  result("InterEpisodeLevel") = v.InterEpisodeLevel;
+  result("DACFileScale") = v.DACFileScale;
+  result("DACFileOffset") = v.DACFileOffset;
+  result("DACFileEpisodeNum") = v.DACFileEpisodeNum;
+  result("DACFileADCNum") = v.DACFileADCNum;
+  result("ConditEnable") = v.ConditEnable;
+  result("ConditNumPulses") = v.ConditNumPulses;
+  result("BaselineDuration") = v.BaselineDuration;
+  result("BaselineLevel") = v.BaselineLevel;
+  result("StepDuration") = v.StepDuration;
+  result("StepLevel") = v.StepLevel;
+  result("PostTrainPeriod") = v.PostTrainPeriod;
+  result("PostTrainLevel") = v.PostTrainLevel;
+  result("MembTestEnable") = v.MembTestEnable;
+  result("LeakSubtractType") = v.LeakSubtractType;
+  result("PNPolarity") = v.PNPolarity;
+  result("PNHoldingLevel") = v.PNHoldingLevel;
+  result("PNNumADCChannels") = v.PNNumADCChannels;
+  result("PNPosition") = v.PNPosition;
+  result("PNNumPulses") = v.PNNumPulses;
+  result("PNSettlingTime") = v.PNSettlingTime;
+  result("PNInterpulse") = v.PNInterpulse;
+  result("LTPUsageOfDAC") = v.LTPUsageOfDAC;
+  result("LTPPresynapticPulses") = v.LTPPresynapticPulses;
+  result("DACFilePathIndex") = v.DACFilePathIndex;
+  result("MembTestPreSettlingTimeMS") = v.MembTestPreSettlingTimeMS;
+  result("MembTestPostSettlingTimeMS") = v.MembTestPostSettlingTimeMS;
+  result("LeakSubtractADCIndex") = v.LeakSubtractADCIndex;
+  return result;
+}
+
+Rcpp::List attr_Epoch(abf2::FileMeta const &meta) {
+  struct vect_t {
+    std::vector<int16_t> EpochNum;
+    std::vector<int16_t> DigitalValue;
+    std::vector<int16_t> DigitalTrainValue;
+    std::vector<int16_t> AlternateDigitalValue;
+    std::vector<int16_t> AlternateDigitalTrainValue;
+    std::vector<bool> EpochCompression;
+  } v;
+  for (auto const &e : meta.epoch) {
+    v.EpochNum.push_back(e.nEpochNum);
+    v.DigitalValue.push_back(e.nDigitalValue);
+    v.DigitalTrainValue.push_back(e.nDigitalTrainValue);
+    v.AlternateDigitalValue.push_back(e.nAlternateDigitalValue);
+    v.AlternateDigitalTrainValue.push_back(e.nAlternateDigitalTrainValue);
+    v.EpochCompression.push_back(e.bEpochCompression);
+  }
+  Rcpp::List result;
+  result("EpochNum") = v.EpochNum;
+  result("DigitalValue") = v.DigitalValue;
+  result("DigitalTrainValue") = v.DigitalTrainValue;
+  result("AlternateDigitalValue") = v.AlternateDigitalValue;
+  result("AlternateDigitalTrainValue") = v.AlternateDigitalTrainValue;
+  result("EpochCompression") = v.EpochCompression;
+  return result;
+}
+
+Rcpp::List attr_EpochPerDAC(abf2::FileMeta const &meta) {
+  struct vect_t {
+    std::vector<int16_t> EpochNum;
+    std::vector<int16_t> DACNum;
+    std::vector<int16_t> EpochType;
+    std::vector<float> EpochInitLevel;
+    std::vector<float> EpochLevelInc;
+    std::vector<int32_t> EpochInitDuration;
+    std::vector<int32_t> EpochDurationInc;
+    std::vector<int32_t> EpochPulsePeriod;
+    std::vector<int32_t> EpochPulseWidth;
+  } v;
+  for (auto const &e : meta.epochPerDac) {
+    v.EpochNum.push_back(e.nEpochNum);
+    v.DACNum.push_back(e.nDACNum);
+    v.EpochType.push_back(e.nEpochType);
+    v.EpochInitLevel.push_back(e.fEpochInitLevel);
+    v.EpochLevelInc.push_back(e.fEpochLevelInc);
+    v.EpochInitDuration.push_back(e.lEpochInitDuration);
+    v.EpochDurationInc.push_back(e.lEpochDurationInc);
+    v.EpochPulsePeriod.push_back(e.lEpochPulsePeriod);
+    v.EpochPulseWidth.push_back(e.lEpochPulseWidth);
+  }
+  Rcpp::List result;
+  result("EpochNum") = v.EpochNum;
+  result("DACNum") = v.DACNum;
+  result("EpochType") = v.EpochType;
+  result("EpochInitLevel") = v.EpochInitLevel;
+  result("EpochLevelInc") = v.EpochLevelInc;
+  result("EpochInitDuration") = v.EpochInitDuration;
+  result("EpochDurationInc") = v.EpochDurationInc;
+  result("EpochPulsePeriod") = v.EpochPulsePeriod;
+  result("EpochPulseWidth") = v.EpochPulseWidth;
+  return result;
+}
+
+Rcpp::List attr_UserList(abf2::FileMeta const &meta) {
+  struct vect_t {
+    std::vector<int16_t> ListNum;
+    std::vector<int16_t> ULEnable;
+    std::vector<int16_t> ULParamToVary;
+    std::vector<int16_t> ULRepeat;
+    std::vector<int32_t> ULParamValueListIndex;
+  } v;
+  for (auto const &e : meta.userList) {
+    v.ListNum.push_back(e.nListNum);
+    v.ULEnable.push_back(e.nULEnable);
+    v.ULParamToVary.push_back(e.nULParamToVary);
+    v.ULRepeat.push_back(e.nULRepeat);
+    v.ULParamValueListIndex.push_back(e.lULParamValueListIndex);
+  }
+  Rcpp::List result;
+  result("ListNum") = v.ListNum;
+  result("ULEnable") = v.ULEnable;
+  result("ULParamToVary") = v.ULParamToVary;
+  result("ULRepeat") = v.ULRepeat;
+  result("ULParamValueListIndex") = v.ULParamValueListIndex;
+  return result;
+}
+
+Rcpp::List attr_SynchArray(abf2::FileMeta const &meta) {
+  struct vect_t {
+    std::vector<int32_t> Start;
+    std::vector<int32_t> Length;
+  } v;
+  for (auto const &e : meta.synchArray) {
+    v.Start.push_back(e.lStart);
+    v.Length.push_back(e.lLength);
+  }
+  Rcpp::List result;
+  result("Start") = v.Start;
+  result("Length") = v.Length;
   return result;
 }
