@@ -146,7 +146,7 @@ class DataLoader {
   void copy_data_var(PtrType raw, double *target) const {
     size_t p = 0;
     for (size_t event = 0; event < nsweep; ++event) {
-      for (size_t tick = 0; tick < sa[event].lLength; ++tick) {
+      for (size_t tick = 0; tick < size_t(sa[event].lLength); ++tick) {
         for (size_t chan = 0; chan < nchan; ++chan) {
           target[v_idx(chan, event, tick)] = raw[p];
           ++p;
